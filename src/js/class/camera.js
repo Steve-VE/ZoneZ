@@ -20,6 +20,11 @@ class Camera{
         this.setAsMainCamera();
     }
 
+    /**
+     * Say to the Camera to follow this entity.
+     *
+     * @param {Entity} entity
+     */
     bindTo(entity) {
         this.target = entity;
         this.x = this.target.x;
