@@ -16,7 +16,7 @@ class Game {
         // this.beforeUpdate();
         this.update();
         this.draw();
-        // this.AfterUpdate();
+        this.afterUpdate();
 
         if (Date.now() >= this.milliseconds + 1000) {
             this.milliseconds = Date.now();
@@ -30,6 +30,12 @@ class Game {
     update() {
         for (const entity of Entity.all()) {
             entity.update();
+        }
+    }
+
+    afterUpdate() {
+        if (mainCamera) {
+            mainCamera.update();
         }
     }
 

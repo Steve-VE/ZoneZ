@@ -3,21 +3,14 @@ class Tile extends Entity {
     constructor(args) {
         super(args);
         this.blocking = args.blocking;
+        this.spriteIndex = args.spriteIndex || 0;
     }
 
     draw() {
         if (this.blocking) {
-            noStroke();
-            // Wall
-            fill('gray');
-            rect(this.x, this.y - TILE_SIZE, TILE_SIZE, TILE_SIZE * 2);
-            // Roof
-            fill(0);
-            rect(this.x, this.y - TILE_SIZE * 2, TILE_SIZE);
+            Sprite.get(12).draw(this.x, this.y);
         } else {
-            stroke(180);
-            fill(200);
-            rect(this.x, this.y, TILE_SIZE);
+            Sprite.get(this.spriteIndex - 1).draw(this.x, this.y);
         }
     }
 

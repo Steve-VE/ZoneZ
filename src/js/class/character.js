@@ -67,10 +67,10 @@ class Character extends Entity{
     }
 
     draw() {
-        fontSize(32);
+        fontSize(TILE_SIZE);
         // text('🕺', ...this.pos);
         text('🙍‍♂️', ...this.pos);
-        fontSize(16);
+        fontSize(TILE_SIZE / 2);
         text('🔫', this.left, this.y);
         // text('🧟‍♀️', ...this.pos);
     }
