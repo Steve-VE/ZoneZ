@@ -1,12 +1,8 @@
 
-class Character {
+class Character extends Entity{
     constructor(args) {
-        this.x = args.x || 0;
-        this.y = args.y || 0;
+        super(args);
         this.z = 7;
-
-        this.size = args.size || TILE_SIZE;
-
         this.acceleration = args.acceleration || 0.5;
         this.speed = args.speed || 0;
         this.speedX = 0;
@@ -84,10 +80,10 @@ class Character {
         noFill();
         stroke('gray');
         ctx.lineWidth = 0.5;
-        rect(...this.cornerTopLeft, this.size);
+        rect(...this.cornerTopLeft, this.width, this.height);
         fill(0, 0, 0, 0.2);
         stroke('red');
-        circle(...this.pos, this.size / 2);
+        circle(...this.pos, this.width / 2, this.height / 2);
         fill('red');
         point(...this.pos);
         point(...this.cornerBottomLeft);
@@ -117,25 +113,6 @@ class Character {
             this.y += this.speedY;
         }
 
-        toDraw.push(this);
+        Entity.toDraw(this);
     }
-
-    // Getters
-    get x() { return this._x - (drawContext && mainCamera.paddingX); }
-    get y() { return this._y - (drawContext && mainCamera.paddingY); }
-    get z() { return this._y + this._z; }
-    get bottom() { return this.y + (this.size / 2); }
-    get left() { return this.x - (this.size / 2); }
-    get right() { return this.x + (this.size / 2); }
-    get top() { return this.y - (this.size / 2); }
-    get pos() { return [this.x, this.y]; }
-    get cornerBottomLeft() { return [this.left, this.bottom]; }
-    get cornerBottomRight() { return [this.right, this.bottom]; }
-    get cornerTopLeft() { return [this.left, this.top]; }
-    get cornerTopRight() { return [this.right, this.top]; }
-
-    // Setters
-    set x(px) { this._x = px; }
-    set y(py) { this._y = py; }
-    set z(pz) { this._z = pz; }
 }

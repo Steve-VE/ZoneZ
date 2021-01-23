@@ -27,7 +27,7 @@ class Controller {
         }
 
         window.addEventListener('keydown', (ev) => {
-            const key = ev.key;
+            const key = ev.key.toLowerCase();
             if (this._keys.includes(key)) {
                 const action = this.keyactions[key];
                 if (!this.actions[action]) {
@@ -38,7 +38,7 @@ class Controller {
         });
 
         window.addEventListener('keyup', (ev) => {
-            const key = ev.key;
+            const key = ev.key.toLowerCase();
             if (this._keys.includes(key)) {
                 const action = this.keyactions[key];
                 if (this.actions[action]) {

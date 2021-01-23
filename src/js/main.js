@@ -45,9 +45,12 @@ let ctx;
 let mainCamera;
 let drawContext = false;
 
+const game = new Game();
+
 const character = new Character({
     x: TILE_SIZE * 7,
     y: TILE_SIZE * 4,
+    size: TILE_SIZE,
 });
 
 const controller = new Controller();
@@ -58,52 +61,4 @@ const camera = new Camera({
 
 document.addEventListener('DOMContentLoaded', () => {
     camera.attachToDOM();
-    setInterval(gameLoop, 1000 / FRAMERATE);
 });
-
-
-const gameLoop = function () {
-    frame_count++;
-    frame_count_by_second++;
-    // Updates:
-    for (let y = 0; y < level.height; y++){
-        for (let x = 0; x < level.width; x++){
-            level.tiles[y][x].update();
-        }
-    }
-    character.update();
-    camera.update();
-
-    // Draws:
-    drawContext = true;
-    // Draw background
-    fill('black');
-    noStroke();
-    rect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    // Draw sprites
-    if (toDraw.length) {
-        toDraw.sort((e1, e2) => e1.z < e2.z ? 1 : -1);
-        while(toDraw.length) {
-            const sprite = toDraw.pop();
-            sprite.draw();
-        }
-    }
-    // // Draw tiles
-    // for (let y = 0; y < level.height; y++){
-    //     for (let x = 0; x < level.width; x++){
-    //         level.tiles[y][x].draw();
-    //     }
-    // }
-    // Draw entities
-    character.drawOnHUD();
-    camera.drawOnHUD();
-    drawContext = false;
-
-    if(Date.now() >= millisecond + 1000) {
-        millisecond = Date.now();
-        frame_rate = frame_count_by_second;
-        // console.log(`-- ${parseInt(millisecond / 1000)} s: ${frame_rate} fps`);
-        // console.log(`-- ${frame_rate} fps`);
-        frame_count_by_second = 0;
-    }
-};

@@ -1,9 +1,7 @@
 
-class Tile {
+class Tile extends Entity {
     constructor(args) {
-        this.x = args.x;
-        this.y = args.y;
-        this.z = 0;
+        super(args);
         this.blocking = args.blocking;
     }
 
@@ -24,15 +22,12 @@ class Tile {
     }
 
     update() {
-        toDraw.push(this);
+        Entity.toDraw(this);
     }
 
     // Getters
     get x() {
-        if (drawContext){
-            return (this._x * TILE_SIZE) - mainCamera.paddingX;
-        }
-        return this._x * TILE_SIZE;
+        return (this._x * TILE_SIZE) - (drawContext && mainCamera.paddingX);
     }
     get y() {
         if (drawContext){
