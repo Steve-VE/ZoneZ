@@ -4,6 +4,9 @@ class Sprite {
     static get(index) {
         return Sprite._sprites[index];
     }
+    static all() {
+        return Sprite._sprites;
+    }
 
     constructor(args) {
         this.source = args.source;

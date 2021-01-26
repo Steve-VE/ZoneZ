@@ -1,12 +1,25 @@
 
 class Game {
     constructor() {
+        this.mode = 'editor';
         this.frame_count = 0;
         this.frame_count_by_second = 0;
         this.frame_rate = 0;
         this.milliseconds = Date.now();
 
         setInterval(this.loop.bind(this), 1000 / FRAMERATE);
+
+        // document.addEventListener('DOMContentLoaded', () => {
+            this.tileSelector = document.createElement('div');
+            for (const sprite of Sprite.all()) {
+                const tileImage = document.createElement('img');
+                tileImage.src = sprite.source.src;
+                tileImage.style.width = `${sprite.width * 2}px`;
+                tileImage.style.height = `${sprite.height * 2}px`;
+                this.tileSelector.appendChild(tileImage);
+            }
+            document.body.appendChild(this.tileSelector);
+        // });
     }
 
     loop() {

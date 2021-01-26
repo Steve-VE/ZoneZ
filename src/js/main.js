@@ -12,56 +12,23 @@ let frame_rate = 0;
 let millisecond = Date.now();
 let toDraw = [];
 
-const level = {
-    width: 16,
-    height: 10,
-    data: [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
-        [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0],
-        [0, 1, 2, 3, 0, 0, 1, 2, 3, 0, 0, 1, 1, 2, 3, 0],
-        [0, 1, 1, 2, 0, 0, 1, 1, 2, 0, 0, 1, 1, 1, 3, 0],
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-        [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-        [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ],
-    tiles: [],
-};
-
-// Convert the data into tiles.
-for (let y = 0; y < level.height; y++) {
-    level.tiles[y] = [];
-    for (let x = 0; x < level.width; x++) {
-        level.tiles[y][x] = new Tile({
-            x, y,
-            blocking: level.data[y][x] === 0,
-            spriteIndex: level.data[y][x],
-        });
-    }
-}
-
 let ctx;
 let mainCamera;
 let tileset;
 let drawContext = false;
-
-const game = new Game();
+let room;
+let game;
 
 const character = new Character({
     x: TILE_SIZE * 7,
-    y: TILE_SIZE * 4,
+    y: TILE_SIZE * 10,
     size: TILE_SIZE,
 });
 
 const controller = new Controller();
 
-const camera = new Camera({
-    follow: character,
-});
-
 document.addEventListener('DOMContentLoaded', () => {
+    // TODO: need to do a better loading ressource and game launch process.
     // Load sprites.
     tileset = new Image();
     tileset.onload = function () {
@@ -75,7 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 marginY: y,
             });
         }
-    }
+        // Launch the game.
+        game = new Game();
+        room = new Room({});
+        const camera = new Camera({
+            follow: character,
+        });
+        camera.attachToDOM();
+    };
     tileset.src = 'src/img/tileset.png';
-    camera.attachToDOM();
 });

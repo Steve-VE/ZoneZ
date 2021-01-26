@@ -15,7 +15,7 @@ class Character extends Entity{
         let ty = Math.floor(this.y / TILE_SIZE);
         if (this.speedX > 0) {
             tx = Math.floor((this.right + this.speedX) / TILE_SIZE);
-            const tile = level.tiles[ty][tx];
+            const tile = room.tiles[ty][tx];
 
             if (tile.blocking) {
                 this.speedX = 0;
@@ -26,7 +26,7 @@ class Character extends Entity{
             }
         } else if (this.speedX < 0) {
             tx = Math.floor((this.left + this.speedX) / TILE_SIZE);
-            const tile = level.tiles[ty][tx];
+            const tile = room.tiles[ty][tx];
 
             if (tile.blocking) {
                 this.speedX = 0;
@@ -43,7 +43,7 @@ class Character extends Entity{
         let ty;
         if (this.speedY > 0) {
             ty = Math.floor((this.bottom + this.speedY) / TILE_SIZE);
-            const tile = level.tiles[ty][tx];
+            const tile = room.tiles[ty][tx];
 
             if (tile.blocking) {
                 this.speedY = 0;
@@ -54,7 +54,7 @@ class Character extends Entity{
             }
         } else if (this.speedY < 0) {
             ty = Math.floor((this.top + this.speedY) / TILE_SIZE);
-            const tile = level.tiles[ty][tx];
+            const tile = room.tiles[ty][tx];
 
             if (tile.blocking) {
                 this.speedY = 0;
