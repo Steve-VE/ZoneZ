@@ -6,20 +6,69 @@ class Game {
         this.frame_count_by_second = 0;
         this.frame_rate = 0;
         this.milliseconds = Date.now();
+        this.setup();
+    }
 
-        setInterval(this.loop.bind(this), 1000 / FRAMERATE);
+    setup () {
+        this._loadRessources().then(() => {
+            room = new Room({});
+            const camera = new Camera({
+                follow: character,
+            });
+            camera.attachToDOM();
+            setInterval(this.loop.bind(this), 1000 / FRAMERATE);
+        });
+    }
 
-        // document.addEventListener('DOMContentLoaded', () => {
-            this.tileSelector = document.createElement('div');
-            for (const sprite of Sprite.all()) {
-                const tileImage = document.createElement('img');
-                tileImage.src = sprite.source.src;
-                tileImage.style.width = `${sprite.width * 2}px`;
-                tileImage.style.height = `${sprite.height * 2}px`;
-                this.tileSelector.appendChild(tileImage);
-            }
-            document.body.appendChild(this.tileSelector);
-        // });
+    createTileSelector() {
+        const tileZoom = 2;
+        this.tileSelector = document.createElement('div');
+        this.tileSelector.className = 'tile-selector';
+        let index = 0;
+        for (const sprite of Sprite.all()) {
+            const tileImage = document.createElement('div');
+            tileImage.className = `tile tn-${index++}`;
+            // tileImage.src = sprite.source.src;
+            tileImage.style.backgroundImage = `url(${sprite.source.src})`;
+            tileImage.style.backgroundSize = `${sprite.source.width * tileZoom}px`;
+            tileImage.style.backgroundPosition= `-${sprite.marginX * tileZoom}px -${sprite.marginY * tileZoom}px`;
+            tileImage.style.width = `${sprite.width * tileZoom}px`;
+            tileImage.style.height = `${sprite.height * tileZoom}px`;
+            tileImage.addEventListener('click', (ev) => {
+                const previousSelectedTile = document.querySelector('.tile.selected');
+                if (previousSelectedTile) {
+                    previousSelectedTile.classList.remove('selected');
+                }
+                ev.target.classList.add('selected');
+            })
+            this.tileSelector.appendChild(tileImage);
+        }
+        document.body.appendChild(this.tileSelector);
+    }
+
+    /**
+     * @private
+     * @returns {Promise}
+     */
+    _loadRessources () {
+        return new Promise((resolve, reject) => {
+            const tileset = new Image();
+            tileset.onload = () => {
+                const numberOfTileX = Math.floor(tileset.width / TILE_SIZE);
+                for (let i = 0; i < 22; i++) {
+                    const y = Math.floor(i / numberOfTileX) * TILE_SIZE;
+                    const x = ((i % numberOfTileX) * TILE_SIZE);
+                    new Sprite({
+                        source: tileset,
+                        marginX: x,
+                        marginY: y,
+                    });
+                }
+                this.createTileSelector();
+                resolve();
+            };
+            tileset.src = 'src/img/tileset.png';
+        });
     }
 
     loop() {

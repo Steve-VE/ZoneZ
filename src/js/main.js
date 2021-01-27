@@ -28,27 +28,6 @@ const character = new Character({
 const controller = new Controller();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // TODO: need to do a better loading ressource and game launch process.
-    // Load sprites.
-    tileset = new Image();
-    tileset.onload = function () {
-        const numberOfTileX = Math.floor(tileset.width / TILE_SIZE);
-        for (let i = 0; i < 21; i++) {
-            const y = Math.floor(i / numberOfTileX) * TILE_SIZE;
-            const x = ((i % numberOfTileX) * TILE_SIZE);
-            new Sprite({
-                source: tileset,
-                marginX: x,
-                marginY: y,
-            });
-        }
-        // Launch the game.
-        game = new Game();
-        room = new Room({});
-        const camera = new Camera({
-            follow: character,
-        });
-        camera.attachToDOM();
-    };
-    tileset.src = 'src/img/tileset.png';
+    // Launch the game.
+    game = new Game();
 });

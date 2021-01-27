@@ -2,31 +2,36 @@
   margin: 0;
   padding: 0;
   background-color: black;
+  box-sizing: content-box;
 }
 
 body {
   height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
   width: 800px;
   height: 600px;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
   image-rendering: crisp-edges;
-  -webkit-box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.33);
-          box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.33);
+  box-shadow: 0 0 4px 2px rgba(255, 255, 255, 0.33);
+}
+
+.tile-selector .tile {
+  vertical-align: top;
+  display: inline-block;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.tile-selector .tile.selected {
+  box-shadow: inset 0 0 1px 1px white;
+}
+
+.tile-selector .tile:not(.selected):hover {
+  box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.66);
 }
 /*# sourceMappingURL=style.css.map */
