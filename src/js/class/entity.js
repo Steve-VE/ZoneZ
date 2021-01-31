@@ -29,6 +29,20 @@ class Entity {
     update() {}
     draw() {}
     afterUpdate() {}
+    // Special drawing method to draw something on the top of the sprites.
+    drawOnHUD() {}
+
+    /**
+     * Checks if the mouse is on the entity.
+     *
+     * @param {Mouse} mouse
+     * @returns {boolean}
+     */
+    mouseOn(mouse) {
+        return mouse.x >= this.left && mouse.x <= this.right &&
+            mouse.y >= this.top && mouse.y <= this.bottom;
+    }
+    onClick() {}
 
     // Getters
     get x() { return this._x - (drawContext && mainCamera.paddingX); }

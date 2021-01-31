@@ -2,6 +2,8 @@
 // Constants
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 300;
+// const CANVAS_WIDTH = 800;
+// const CANVAS_HEIGHT = 600;
 const FRAMERATE = 30;
 // const FRAMERATE = 60;
 const TILE_SIZE = 16;

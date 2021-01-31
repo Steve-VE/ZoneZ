@@ -20,19 +20,21 @@ function fontSize(size) {
     __FONTSIZE__ = size;
 }
 
+function lineWidth(width) {
+    ctx.lineWidth = width;
+}
+
 const noFill = () => __FILL__ = false;
 const noStroke = () => __STROKE__ = false;
 
-function rect (x, y, width, height) {
-    if (!height) {
-        height = width;
-    }
-    __FILL__ && ctx.fillRect(x, y, width, height);
-    __STROKE__ && ctx.strokeRect(x, y, width, height);
-}
-
 function point (x, y) {
     rect(x, y, 1);
+}
+
+function rect (x, y, width, height) {
+    height = height || width;
+    __FILL__ && ctx.fillRect(x, y, width, height);
+    __STROKE__ && ctx.strokeRect(x, y, width, height);
 }
 
 function stroke(r, g, b, a=1) {

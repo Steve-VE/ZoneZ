@@ -1,6 +1,7 @@
 
 class Camera{
     constructor(args) {
+        this.zoom = 1;
         this.x = args.x || 0;
         this.y = args.y|| 0;
         this.marginX = args.marginX || args.margin || CANVAS_WIDTH * 0.15;
@@ -17,6 +18,9 @@ class Camera{
         this.canvas.width = CANVAS_WIDTH;
         this.canvas.height = CANVAS_HEIGHT;
         document.body.appendChild(this.canvas);
+        // Computes the zoom value.
+        const canvasRect = this.canvas.getBoundingClientRect();
+        this.zoom = canvasRect.width / this.canvas.width;
         this.setAsMainCamera();
     }
 
@@ -47,6 +51,7 @@ class Camera{
     setAsMainCamera() {
         mainCamera = this;
         ctx = this.canvas.getContext('2d');
+        controller.bindMouseEvent(this);
     }
 
     update() {

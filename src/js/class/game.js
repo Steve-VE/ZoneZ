@@ -1,7 +1,8 @@
 
 class Game {
-    constructor() {
-        this.mode = 'editor';
+    constructor(args={}) {
+        this.mode = 'game';
+        this.devMode = args.devMode;
         this.frame_count = 0;
         this.frame_count_by_second = 0;
         this.frame_rate = 0;
@@ -27,8 +28,8 @@ class Game {
         let index = 0;
         for (const sprite of Sprite.all()) {
             const tileImage = document.createElement('div');
+            tileImage.dataset.spriteIndex = index;
             tileImage.className = `tile tn-${index++}`;
-            // tileImage.src = sprite.source.src;
             tileImage.style.backgroundImage = `url(${sprite.source.src})`;
             tileImage.style.backgroundSize = `${sprite.source.width * tileZoom}px`;
             tileImage.style.backgroundPosition= `-${sprite.marginX * tileZoom}px -${sprite.marginY * tileZoom}px`;
@@ -40,7 +41,8 @@ class Game {
                     previousSelectedTile.classList.remove('selected');
                 }
                 ev.target.classList.add('selected');
-            })
+                this.selectedSpriteIndex = ev.target.dataset.spriteIndex;
+            });
             this.tileSelector.appendChild(tileImage);
         }
         document.body.appendChild(this.tileSelector);
@@ -51,24 +53,30 @@ class Game {
      * @returns {Promise}
      */
     _loadRessources () {
-        return new Promise((resolve, reject) => {
-            const tileset = new Image();
-            tileset.onload = () => {
-                const numberOfTileX = Math.floor(tileset.width / TILE_SIZE);
-                for (let i = 0; i < 22; i++) {
-                    const y = Math.floor(i / numberOfTileX) * TILE_SIZE;
-                    const x = ((i % numberOfTileX) * TILE_SIZE);
-                    new Sprite({
-                        source: tileset,
-                        marginX: x,
-                        marginY: y,
-                    });
-                }
-                this.createTileSelector();
-                resolve();
-            };
-            tileset.src = 'src/img/tileset.png';
-        });
+        const promises = [];
+        for (const data of _tileSets) {
+            // Creates a promise by tileset file.
+            const prom = new Promise((resolve, reject) => {
+                const tileset = new Image();
+                tileset.onload = () => {
+                    const numberOfTileX = Math.floor(tileset.width / TILE_SIZE);
+                    for (let i = data.startAt; i < data.endAt; i++) {
+                        const y = Math.floor(i / numberOfTileX) * TILE_SIZE;
+                        const x = ((i % numberOfTileX) * TILE_SIZE);
+                        new Sprite({
+                            source: tileset,
+                            marginX: x,
+                            marginY: y,
+                        });
+                    }
+                    // Resolves the promise when the tileset's image is loaded.
+                    resolve();
+                };
+                tileset.src = data.source;
+            });
+            promises.push(prom);
+        }
+        return Promise.all(promises);
     }
 
     loop() {
@@ -87,6 +95,22 @@ class Game {
             // console.log(`-- ${this.frame_rate} fps`);
             this.frame_count_by_second = 0;
         }
+    }
+
+    onClick(mouse) {
+        for (const entity of Entity.all()) {
+            if (entity.mouseOn(mouse)) {
+                entity.onClick();
+            }
+        }
+    }
+
+    openEditor() {
+        if (this.mode === 'editor') {
+            return;
+        }
+        this.mode = 'editor';
+        this.createTileSelector();
     }
 
     update() {
@@ -114,10 +138,16 @@ class Game {
         if (entitiesToDraw.length) {
             // Sort the entities by their `z` property to make the drawing order right.
             entitiesToDraw.sort((e1, e2) => e1.z < e2.z ? 1 : -1);
+            // entitiesToDraw.sort((e1, e2) => e1.z < e2.z ? -1 : 1);
             while(entitiesToDraw.length) {
                 const sprite = entitiesToDraw.pop();
                 sprite.draw();
             }
+        }
+
+        // Draw on HUD
+        for (const entity of Entity.all()) {
+            entity.drawOnHUD();
         }
         drawContext = false;
     }
